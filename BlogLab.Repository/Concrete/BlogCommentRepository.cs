@@ -91,7 +91,8 @@ namespace BlogLab.Repository.Concrete
                         "BlogComment_Upsert",
                         new
                         {
-                            BlogComment = dataTable.AsTableValuedParameter("dbo.BlogCommentType")
+                            BlogComment = dataTable.AsTableValuedParameter("dbo.BlogCommentType"),
+                            ApplicationUserId = applicationUserId
                         },
                         commandType: System.Data.CommandType.StoredProcedure
                     );
