@@ -5,13 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.1" NoWarn="NU1605" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BlogLab.Identity\BlogLab.Identity.csproj" />
     <ProjectReference Include="..\BlogLab.Models\BlogLab.Models.csproj" />
+    <ProjectReference Include="..\BlogLab.Repository\BlogLab.Repository.csproj" />
+    <ProjectReference Include="..\BlogLab.Service\BlogLab.Service.csproj" />
   </ItemGroup>
 
 </Project>
