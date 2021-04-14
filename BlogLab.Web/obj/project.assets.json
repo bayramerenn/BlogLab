@@ -203,6 +203,16 @@
             "rid": "win"
           }
         }
+      },
+      "BlogLab.Models/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "compile": {
+          "bin/placeholder/BlogLab.Models.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BlogLab.Models.dll": {}
+        }
       }
     }
   },
@@ -576,10 +586,16 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "BlogLab.Models/1.0.0": {
+      "type": "project",
+      "path": "../BlogLab.Models/BlogLab.Models.csproj",
+      "msbuildProject": "../BlogLab.Models/BlogLab.Models.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
+      "BlogLab.Models >= 1.0.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 5.0.1",
       "Microsoft.AspNetCore.Authentication.OpenIdConnect >= 5.0.1",
       "Swashbuckle.AspNetCore >= 5.6.3"
@@ -611,7 +627,11 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\angular\\BlogLab\\BlogLab.Models\\BlogLab.Models.csproj": {
+              "projectPath": "D:\\angular\\BlogLab\\BlogLab.Models\\BlogLab.Models.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
