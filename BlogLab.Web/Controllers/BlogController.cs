@@ -1,4 +1,5 @@
 ﻿using BlogLab.Models.Blog;
+using BlogLab.Repository;
 using BlogLab.Repository.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -26,7 +27,7 @@ namespace BlogLab.Web.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Create(BlogCreate blogCreate)
+        public async Task<ActionResult<Blog>> Create(BlogCreate blogCreate)
         {
             int applicationUserId = int.Parse(User.Claims.First(i => i.Type == JwtRegisteredClaimNames.NameId).Value);
 
@@ -36,7 +37,7 @@ namespace BlogLab.Web.Controllers
 
                 if (photo.ApplicationUserId != applicationUserId)
                 {
-                    return BadRequest("You did not upload the photo");
+                    return BadRequest("You did not upload the photo.");
                 }
             }
 

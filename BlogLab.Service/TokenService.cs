@@ -16,8 +16,8 @@ namespace BlogLab.Service
 
         public TokenService(IConfiguration configuration)
         {
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
-            _issuer = configuration["Jwt:Issuer"];
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TokenOptions:Key"]));
+            _issuer = configuration["TokenOptions:Issuer"];
         }
 
         public string CreateToken(ApplicationUserIdentity user)

@@ -2,8 +2,11 @@
 using Dapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,20 +34,22 @@ namespace BlogLab.Repository
             dataTable.Columns.Add("PasswordHash", typeof(string));
 
             dataTable.Rows.Add(
-                    user.Username,
-                    user.NormalizedUsername,
-                    user.Email,
-                    user.NormalizedEmail,
-                    user.Fullname,
-                    user.PasswordHash
+                user.Username,
+                user.NormalizedUsername,
+                user.Email,
+                user.NormalizedEmail,
+                user.Fullname,
+                user.PasswordHash
                 );
+
             using (var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection")))
             {
                 await connection.OpenAsync(cancellationToken);
 
                 await connection.ExecuteAsync("Account_Insert",
-                        new { Account = dataTable.AsTableValuedParameter("dbo.AccountType") }, commandType: CommandType.StoredProcedure);
+                    new { Account = dataTable.AsTableValuedParameter("dbo.AccountType") }, commandType: CommandType.StoredProcedure);
             }
+
             return IdentityResult.Success;
         }
 
@@ -59,7 +64,8 @@ namespace BlogLab.Repository
                 await connection.OpenAsync(cancellationToken);
 
                 applicationUser = await connection.QuerySingleOrDefaultAsync<ApplicationUserIdentity>(
-                    "Account_GetByUserName", new { NormalizedUsername = normalizedUsername }, commandType: CommandType.StoredProcedure
+                    "Account_GetByUsername", new { NormalizedUsername = normalizedUsername },
+                    commandType: CommandType.StoredProcedure
                     );
             }
 

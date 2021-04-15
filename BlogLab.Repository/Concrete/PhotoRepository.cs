@@ -2,13 +2,15 @@
 using BlogLab.Repository.Abstract;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogLab.Repository.Concrete
+namespace BlogLab.Repository
 {
     public class PhotoRepository : IPhotoRepository
     {
@@ -19,7 +21,7 @@ namespace BlogLab.Repository.Concrete
             _config = config;
         }
 
-        public async Task<int> DeleteAsync(int photoId)
+        public async Task<int> DeletetAsync(int photoId)
         {
             int affectedRows = 0;
 
@@ -28,10 +30,9 @@ namespace BlogLab.Repository.Concrete
                 await connection.OpenAsync();
 
                 affectedRows = await connection.ExecuteAsync(
-                        "Photo_Delete",
-                        new { PhotoId = photoId },
-                        commandType: System.Data.CommandType.StoredProcedure
-                    );
+                    "Photo_Delete",
+                    new { PhotoId = photoId },
+                    commandType: CommandType.StoredProcedure);
             }
 
             return affectedRows;
@@ -40,32 +41,34 @@ namespace BlogLab.Repository.Concrete
         public async Task<List<Photo>> GetAllByUserIdAsync(int applicationUserId)
         {
             IEnumerable<Photo> photos;
+
             using (var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection")))
             {
                 await connection.OpenAsync();
 
                 photos = await connection.QueryAsync<Photo>(
-                        "Photo_GetByUserId",
-                        new { ApplicationUserId = applicationUserId },
-                        commandType: System.Data.CommandType.StoredProcedure
-                    );
+                    "Photo_GetByUserId",
+                    new { ApplicationUserId = applicationUserId },
+                    commandType: CommandType.StoredProcedure);
             }
+
             return photos.ToList();
         }
 
         public async Task<Photo> GetAsync(int photoId)
         {
             Photo photo;
+
             using (var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection")))
             {
                 await connection.OpenAsync();
 
                 photo = await connection.QueryFirstOrDefaultAsync<Photo>(
-                        "Photo_GetByUserId",
-                        new { PhotoId = photoId },
-                        commandType: System.Data.CommandType.StoredProcedure
-                    );
+                    "Photo_Get",
+                    new { PhotoId = photoId },
+                    commandType: CommandType.StoredProcedure);
             }
+
             return photo;
         }
 
@@ -85,16 +88,17 @@ namespace BlogLab.Repository.Concrete
                 await connection.OpenAsync();
 
                 newPhotoId = await connection.ExecuteScalarAsync<int>(
-                        "Photo_Insert",
-                        new
-                        {
-                            Photo = dataTable.AsTableValuedParameter("dbo.PhotoType"),
-                            ApplicationUserId = applicationUserId
-                        },
-                        commandType: System.Data.CommandType.StoredProcedure
-                    );
+                    "Photo_Insert",
+                    new
+                    {
+                        Photo = dataTable.AsTableValuedParameter("dbo.PhotoType"),
+                        ApplicationUserId = applicationUserId
+                    },
+                    commandType: CommandType.StoredProcedure);
             }
-            var photo = await GetAsync(newPhotoId);
+
+            Photo photo = await GetAsync(newPhotoId);
+
             return photo;
         }
     }

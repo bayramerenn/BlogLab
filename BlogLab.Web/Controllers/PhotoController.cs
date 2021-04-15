@@ -1,4 +1,5 @@
 ﻿using BlogLab.Models.Photo;
+using BlogLab.Repository;
 using BlogLab.Repository.Abstract;
 using BlogLab.Service;
 using Microsoft.AspNetCore.Authorization;
@@ -71,7 +72,7 @@ namespace BlogLab.Web.Controllers
         }
 
         [Authorize]
-        [HttpGet("{photoId}")]
+        [HttpDelete("{photoId}")]
         public async Task<ActionResult<int>> Delete(int photoId)
         {
             int applicationUserId = int.Parse(User.Claims.First(f => f.Type == JwtRegisteredClaimNames.NameId).Value);
@@ -98,7 +99,7 @@ namespace BlogLab.Web.Controllers
                         return BadRequest(deleteResult.Error.Message);
                     }
 
-                    var affectRows = await _photoRepository.DeleteAsync(foundPhoto.PhotoId);
+                    var affectRows = await _photoRepository.DeletetAsync(foundPhoto.PhotoId);
                 }
                 else
                 {

@@ -1,9 +1,13 @@
-﻿using BlogLab.Models.Account;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BlogLab.Models.Account;
 using BlogLab.Service;
-using Mapster;
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace BlogLab.Web.Controllers
 {
@@ -15,7 +19,10 @@ namespace BlogLab.Web.Controllers
         private readonly UserManager<ApplicationUserIdentity> _userManager;
         private readonly SignInManager<ApplicationUserIdentity> _signInManager;
 
-        public AccountController(ITokenService tokenService, UserManager<ApplicationUserIdentity> userManager, SignInManager<ApplicationUserIdentity> signInManager)
+        public AccountController(
+            ITokenService tokenService,
+            UserManager<ApplicationUserIdentity> userManager,
+            SignInManager<ApplicationUserIdentity> signInManager)
         {
             _tokenService = tokenService;
             _userManager = userManager;
@@ -25,17 +32,29 @@ namespace BlogLab.Web.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<ApplicationUser>> Register(ApplicationUserCreate applicationUserCreate)
         {
-            var applicationUserIdentity = applicationUserCreate.Adapt<ApplicationUserIdentity>();
+            var applicationUserIdentity = new ApplicationUserIdentity
+            {
+                Username = applicationUserCreate.Username,
+                Email = applicationUserCreate.Email,
+                Fullname = applicationUserCreate.Fullname
+            };
 
             var result = await _userManager.CreateAsync(applicationUserIdentity, applicationUserCreate.Password);
 
             if (result.Succeeded)
             {
-                var applicationUser = applicationUserIdentity.Adapt<ApplicationUser>();
+                applicationUserIdentity = await _userManager.FindByNameAsync(applicationUserCreate.Username);
 
-                applicationUser.Token = _tokenService.CreateToken(applicationUserIdentity);
+                ApplicationUser applicationUser = new ApplicationUser()
+                {
+                    ApplicationUserId = applicationUserIdentity.ApplicationUserId,
+                    Username = applicationUserIdentity.Username,
+                    Email = applicationUserIdentity.Email,
+                    Fullname = applicationUserIdentity.Fullname,
+                    Token = _tokenService.CreateToken(applicationUserIdentity)
+                };
 
-                return applicationUser;
+                return Ok(applicationUser);
             }
 
             return BadRequest(result.Errors);
@@ -44,17 +63,24 @@ namespace BlogLab.Web.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<ApplicationUser>> Login(ApplicationUserLogin applicationUserLogin)
         {
-            var applicatonUserIdentity = await _userManager.FindByNameAsync(applicationUserLogin.Username);
+            var applicationUserIdentity = await _userManager.FindByNameAsync(applicationUserLogin.Username);
 
-            if (applicationUserLogin != null)
+            if (applicationUserIdentity != null)
             {
                 var result = await _signInManager.CheckPasswordSignInAsync(
-                    applicatonUserIdentity, applicationUserLogin.Password, false);
+                    applicationUserIdentity,
+                    applicationUserLogin.Password, false);
+
                 if (result.Succeeded)
                 {
-                    ApplicationUser applicationUser = applicatonUserIdentity.Adapt<ApplicationUser>();
-
-                    applicationUser.Token = _tokenService.CreateToken(applicatonUserIdentity);
+                    ApplicationUser applicationUser = new ApplicationUser
+                    {
+                        ApplicationUserId = applicationUserIdentity.ApplicationUserId,
+                        Username = applicationUserIdentity.Username,
+                        Email = applicationUserIdentity.Email,
+                        Fullname = applicationUserIdentity.Fullname,
+                        Token = _tokenService.CreateToken(applicationUserIdentity)
+                    };
 
                     return Ok(applicationUser);
                 }

@@ -2,7 +2,7 @@
 {
     public class ApplicationUser
     {
-        public int AplicationUserId { get; set; }
+        public int ApplicationUserId { get; set; }
         public string Username { get; set; }
         public string Fullname { get; set; }
         public string Email { get; set; }

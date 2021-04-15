@@ -1,8 +1,10 @@
 ﻿using BlogLab.Models.Photo;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogLab.Repository.Abstract
+namespace BlogLab.Repository
 {
     public interface IPhotoRepository
     {
@@ -12,6 +14,6 @@ namespace BlogLab.Repository.Abstract
 
         public Task<List<Photo>> GetAllByUserIdAsync(int applicationUserId);
 
-        public Task<int> DeleteAsync(int photoId);
+        public Task<int> DeletetAsync(int photoId);
     }
 }

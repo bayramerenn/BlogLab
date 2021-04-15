@@ -94,7 +94,7 @@ namespace BlogLab.Repository.Concrete
             return famouesBlogs.ToList();
         }
 
-        public async Task<Blog> GetAsync(int blogId)
+        public async Task<Blog> GetAsync(int applicationUserId)
         {
             Blog blog;
             using (var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection")))
@@ -103,7 +103,7 @@ namespace BlogLab.Repository.Concrete
 
                 blog = await connection.QueryFirstOrDefaultAsync<Blog>(
                         "Blog_GetByUserId",
-                        new { BlogId = blogId },
+                        new { ApplicationUserId = applicationUserId },
                         commandType: System.Data.CommandType.StoredProcedure
                     );
             }
@@ -113,10 +113,10 @@ namespace BlogLab.Repository.Concrete
         public async Task<Blog> UpsertAsync(BlogCreate blogCreate, int applicationUserId)
         {
             var dataTable = new DataTable();
-            dataTable.Columns.Add("BlogId", typeof(string));
+            dataTable.Columns.Add("BlogId", typeof(int));
             dataTable.Columns.Add("Title", typeof(string));
             dataTable.Columns.Add("Content", typeof(string));
-            dataTable.Columns.Add("PhotoId", typeof(string));
+            dataTable.Columns.Add("PhotoId", typeof(int));
 
             dataTable.Rows.Add(blogCreate.BlogId, blogCreate.Title, blogCreate.Content, blogCreate.PhotoId);
 
@@ -127,13 +127,9 @@ namespace BlogLab.Repository.Concrete
                 await connection.OpenAsync();
 
                 newBlogId = await connection.ExecuteScalarAsync<int?>(
-                        "Blog_Upsert",
-                        new
-                        {
-                            BlogId = dataTable.AsTableValuedParameter("dbo.BlogType"),
-                            ApplicationUserId = applicationUserId
-                        },
-                        commandType: System.Data.CommandType.StoredProcedure
+                    "Blog_Upsert",
+                    new { Blog = dataTable.AsTableValuedParameter("dbo.BlogType"), ApplicationUserId = applicationUserId },
+                    commandType: CommandType.StoredProcedure
                     );
             }
 
