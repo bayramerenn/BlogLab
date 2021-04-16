@@ -12,37 +12,36 @@ import { ApplicationUserCreate } from '../models/account/application-user-create
 export class AccountService {
 
   private currentUserSubject$: BehaviorSubject<ApplicationUser>
-  private apiUrl = environment.wepApi + "/account/";
 
   constructor(
     private http: HttpClient
-  ) {
- 
-
-    this.currentUserSubject$ = new BehaviorSubject<ApplicationUser>
-      (JSON.parse(localStorage.getItem('blogLab-currentUser') || '{}'));
+  ) { 
+    this.currentUserSubject$ = new BehaviorSubject<ApplicationUser>(JSON.parse(localStorage.getItem('blogLab-currentUser')|| '{}'));
   }
 
-  login(model:ApplicationUserLogin):Observable<ApplicationUser>{
-    return this.http.post<ApplicationUser>(this.apiUrl+"login",model).pipe(
+  login(model: ApplicationUserLogin) : Observable<ApplicationUser>  {
+    return this.http.post<ApplicationUser>(`${environment.webApi}/Account/login`, model).pipe(
       map((user : ApplicationUser) => {
-        
+
         if (user) {
-          localStorage.setItem('blogLab-currentUser',JSON.stringify(user));
+          localStorage.setItem('blogLab-currentUser', JSON.stringify(user));
           this.setCurrentUser(user);
         }
+
         return user;
       })
-    );
+    )
   }
-  register(model:ApplicationUserCreate):Observable<ApplicationUser>{
-    return this.http.post<ApplicationUser>(this.apiUrl+"register",model).pipe(
-      map((user:ApplicationUser)=>{
+
+  register(model: ApplicationUserCreate) : Observable<ApplicationUser> {
+    return this.http.post<ApplicationUser>(`${environment.webApi}/Account/register`, model).pipe(
+      map((user : ApplicationUser) => {
 
         if (user) {
-          localStorage.setItem('blogLab-currentUser',JSON.stringify(user));
+          localStorage.setItem('blogLab-currentUser', JSON.stringify(user));
           this.setCurrentUser(user);
         }
+
         return user;
       })
     )
@@ -52,21 +51,21 @@ export class AccountService {
     this.currentUserSubject$.next(user);
   }
 
-  public get currentUserValue():ApplicationUser{
+  public get currentUserValue(): ApplicationUser {
     return this.currentUserSubject$.value;
   }
 
-  public givenUserIsloggedIn(username:string){
+  public givenUserIsLoggedIn(username: string) {
     return this.isLoggedIn() && this.currentUserValue.username === username;
   }
 
-  public isLoggedIn(){
+  public isLoggedIn() {
     const currentUser = this.currentUserValue;
     const isLoggedIn = !!currentUser && !!currentUser.token;
     return isLoggedIn;
   }
 
-  logout(){
+  logout() {
     localStorage.removeItem('blogLab-currentUser');
     this.currentUserSubject$.next(null as any);
   }

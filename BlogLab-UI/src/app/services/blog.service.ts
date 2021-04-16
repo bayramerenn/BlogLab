@@ -12,35 +12,33 @@ import { PagedResult } from '../models/blog/paged-result.model';
 })
 export class BlogServiceService {
 
-  apiUrl:string;
+  
   constructor(
     private http: HttpClient
-  ) {
-    this.apiUrl = environment.wepApi + "/Blog";
-  }
+  ) { }
 
   create(model: BlogCreate) : Observable<Blog> {
-    return this.http.post<Blog>(this.apiUrl, model);
+    return this.http.post<Blog>(`${environment.webApi}/Blog`, model);
   }
 
   getAll(blogPaging: BlogPaging) : Observable<PagedResult<Blog>> {
     return this.http.get<PagedResult<Blog>>(
-      `${this.apiUrl}?Page=${blogPaging.page}&PageSize=${blogPaging.pageSize}`);
+      `${environment.webApi}/Blog?Page=${blogPaging.page}&PageSize=${blogPaging.pageSize}`);
   }
 
   get(blogId: number) : Observable<Blog> {
-    return this.http.get<Blog>(`${this.apiUrl}/${blogId}`);
+    return this.http.get<Blog>(`${environment.webApi}/Blog/${blogId}`);
   }
 
   getByApplicationUserId(applicationUserId: number) : Observable<Blog[]> {
-    return this.http.get<Blog[]>(`${this.apiUrl}/user/${applicationUserId}`);
+    return this.http.get<Blog[]>(`${environment.webApi}/Blog/user/${applicationUserId}`);
   }
 
   getMostFamous() : Observable<Blog[]> {
-    return this.http.get<Blog[]>(`${this.apiUrl}/famous`);
+    return this.http.get<Blog[]>(`${environment.webApi}/Blog/famous`);
   }
 
   delete(blogId: number) : Observable<number> {
-    return this.http.delete<number>(`${this.apiUrl}/${blogId}`);
+    return this.http.delete<number>(`${environment.webApi}/Blog/${blogId}`);
   }
 }

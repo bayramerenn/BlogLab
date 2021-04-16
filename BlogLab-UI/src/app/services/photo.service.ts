@@ -10,26 +10,23 @@ import { Photo } from '../models/photo/photo.model';
 export class PhotoService {
 
   
-  apiUrl:string;
   constructor(
     private http: HttpClient
-  ) {
-    this.apiUrl = environment.wepApi + "/Photo";
-  }
+  ) { }
 
   create(model: FormData) : Observable<Photo> {
-    return this.http.post<Photo>(`${this.apiUrl}`, model);
+    return this.http.post<Photo>(`${environment.webApi}/Photo`, model);
   }
 
   getByApplicationUserId() : Observable<Photo[]> {
-    return this.http.get<Photo[]>(`${this.apiUrl}`);
+    return this.http.get<Photo[]>(`${environment.webApi}/Photo`);
   }
 
   get(photoId: number) : Observable<Photo> {
-    return this.http.get<Photo>(`${this.apiUrl}/${photoId}`);
+    return this.http.get<Photo>(`${environment.webApi}/Photo/${photoId}`);
   }
 
   delete(photoId: number) : Observable<number>{
-    return this.http.delete<number>(`${this.apiUrl}/${photoId}`);
+    return this.http.delete<number>(`${environment.webApi}/Photo/${photoId}`);
   }
 }

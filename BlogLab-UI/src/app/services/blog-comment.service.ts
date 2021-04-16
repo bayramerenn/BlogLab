@@ -10,23 +10,21 @@ import { BlogComment } from '../models/blog-comment.model';
 })
 export class BlogCommentService {
 
-  apiUrl: string;
+ 
 
   constructor(
     private http: HttpClient
-  ) {
-    this.apiUrl = environment.wepApi + "/blogcomment";
+  ) { }
+
+  create(model: BlogCommentCreate) : Observable<BlogComment>  {
+    return this.http.post<BlogComment>(`${environment.webApi}/BlogComment`, model);
   }
 
-  create(model: BlogCommentCreate): Observable<BlogComment> {
-    return this.http.post<BlogComment>(this.apiUrl,model);
+  delete(blogCommentId: number) : Observable<number>  {
+    return this.http.delete<number>(`${environment.webApi}/BlogComment/${blogCommentId}`);
   }
 
-  delete(blogCommentId:number):Observable<number>{
-    return this.http.delete<number>(this.apiUrl + `/${blogCommentId}`)
-  }
-
-  getAll(blogId:number):Observable<BlogComment[]>{
-    return this.http.get<BlogComment[]>(this.apiUrl + `/${blogId}`)
+  getAll(blogId: number) : Observable<BlogComment[]> {
+    return this.http.get<BlogComment[]>(`${environment.webApi}/BlogComment/${blogId}`);
   }
 }
