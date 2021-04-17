@@ -4,7 +4,7 @@ import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations'
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown'
 import {CollapseModule} from 'ngx-bootstrap/collapse'
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +27,7 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { ToastrModule as ToastsModule } from 'ngx-toastr';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+
 
 
 @NgModule({
@@ -54,6 +55,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     ToastsModule.forRoot({
      positionClass: 'toast-bottom-right'
     }),
@@ -62,7 +65,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
   ],
   providers: [HttpClient,
     {provide:HTTP_INTERCEPTORS,useClass:JwtInterceptor,multi:true},
-    {provide:HTTP_INTERCEPTORS,useClass:ErrorInterceptor,multi:true},
+     {provide:HTTP_INTERCEPTORS,useClass:ErrorInterceptor,multi:true},
   ],
   bootstrap: [AppComponent]
 })

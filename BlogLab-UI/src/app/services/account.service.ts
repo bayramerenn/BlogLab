@@ -20,9 +20,10 @@ export class AccountService {
   }
 
   login(model: ApplicationUserLogin) : Observable<ApplicationUser>  {
+    console.log(model)
     return this.http.post<ApplicationUser>(`${environment.webApi}/Account/login`, model).pipe(
       map((user : ApplicationUser) => {
-
+        
         if (user) {
           localStorage.setItem('blogLab-currentUser', JSON.stringify(user));
           this.setCurrentUser(user);
