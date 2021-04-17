@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations'
+import {BsDropdownModule} from 'ngx-bootstrap/dropdown'
+import {CollapseModule} from 'ngx-bootstrap/collapse'
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,7 +25,8 @@ import { PhotoAlbumComponent } from './components/photo-album/photo-album.compon
 import { RegisterComponent } from './components/register/register.component';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
-import { ToastrModule } from 'ngx-toastr';
+import { ToastrModule as ToastsModule } from 'ngx-toastr';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 
 @NgModule({
@@ -42,16 +46,19 @@ import { ToastrModule } from 'ngx-toastr';
     LoginComponent,
     NavbarComponent,
     PhotoAlbumComponent,
-    RegisterComponent
+    RegisterComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    ToastrModule.forRoot({
+    ToastsModule.forRoot({
      positionClass: 'toast-bottom-right'
-    })
+    }),
+    BsDropdownModule.forRoot(),
+    CollapseModule.forRoot()
   ],
   providers: [HttpClient,
     {provide:HTTP_INTERCEPTORS,useClass:JwtInterceptor,multi:true},
