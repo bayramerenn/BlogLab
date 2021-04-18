@@ -10,7 +10,7 @@ import { PagedResult } from '../models/blog/paged-result.model';
 @Injectable({
   providedIn: 'root'
 })
-export class BlogServiceService {
+export class BlogService {
 
   
   constructor(

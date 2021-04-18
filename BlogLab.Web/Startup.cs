@@ -84,6 +84,8 @@ namespace BlogLab.Web
             services.AddIdentityCore<ApplicationUserIdentity>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
             })
                 .AddUserStore<UserStore>()
                 .AddDefaultTokenProviders()

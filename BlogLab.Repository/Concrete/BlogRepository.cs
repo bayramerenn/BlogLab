@@ -94,19 +94,20 @@ namespace BlogLab.Repository.Concrete
             return famouesBlogs.ToList();
         }
 
-        public async Task<Blog> GetAsync(int applicationUserId)
+        public async Task<Blog> GetAsync(int blogId)
         {
             Blog blog;
+
             using (var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection")))
             {
                 await connection.OpenAsync();
 
                 blog = await connection.QueryFirstOrDefaultAsync<Blog>(
-                        "Blog_GetByUserId",
-                        new { ApplicationUserId = applicationUserId },
-                        commandType: System.Data.CommandType.StoredProcedure
-                    );
+                    "Blog_Get",
+                    new { BlogId = blogId },
+                    commandType: CommandType.StoredProcedure);
             }
+
             return blog;
         }
 
