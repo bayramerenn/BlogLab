@@ -5,6 +5,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations'
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown'
 import {CollapseModule} from 'ngx-bootstrap/collapse'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {TypeaheadModule} from 'ngx-bootstrap/typeahead'
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -61,7 +63,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
      positionClass: 'toast-bottom-right'
     }),
     BsDropdownModule.forRoot(),
-    CollapseModule.forRoot()
+    CollapseModule.forRoot(),
+    TypeaheadModule.forRoot()
   ],
   providers: [HttpClient,
     {provide:HTTP_INTERCEPTORS,useClass:JwtInterceptor,multi:true},

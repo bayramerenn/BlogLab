@@ -127,11 +127,19 @@ namespace BlogLab.Repository.Concrete
             {
                 await connection.OpenAsync();
 
-                newBlogId = await connection.ExecuteScalarAsync<int?>(
-                    "Blog_Upsert",
-                    new { Blog = dataTable.AsTableValuedParameter("dbo.BlogType"), ApplicationUserId = applicationUserId },
-                    commandType: CommandType.StoredProcedure
-                    );
+                try
+                {
+                    newBlogId = await connection.ExecuteScalarAsync<int?>(
+                                "Blog_Upsert",
+                                new { Blog = dataTable.AsTableValuedParameter("dbo.BlogType"), ApplicationUserId = applicationUserId },
+                                commandType: CommandType.StoredProcedure
+                                );
+                }
+                catch (System.Exception ex)
+                {
+                    System.Console.WriteLine(ex.Message);
+                    throw;
+                }
             }
 
             newBlogId = newBlogId ?? blogCreate.BlogId;
